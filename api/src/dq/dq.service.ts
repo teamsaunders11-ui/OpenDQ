@@ -55,21 +55,20 @@ export class DqService {
   }
 
   private execSodaCommand(command: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       exec(command, (error, stdout, stderr) => {
         if (error) {
           // Log both stdout and stderr for debugging
           console.error('Soda scan error:', error.message);
           console.error('STDERR:', stderr);
           console.error('STDOUT:', stdout);
-          reject(stderr || error.message);
-        } else {
-          try {
-            const parsed = yaml.load(stdout);
-            resolve(parsed);
-          } catch (e) {
-            resolve({ raw: stdout });
-          }
+          // Even if error, try to parse stdout for results
+        }
+        try {
+          const parsed = yaml.load(stdout);
+          resolve(parsed);
+        } catch (e) {
+          resolve({ raw: stdout });
         }
       });
     });

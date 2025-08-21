@@ -29,4 +29,12 @@ export class ApiService {
   post(url: string, body: any, options?: any): Observable<any> {
     return this.http.post('/api' + url, body, options);
   }
+  
+    put<T>(url: string, body: any): Observable<T> {
+      return this.http.put<T>('/api' + url, body);
+    }
+  
+    delete<T>(url: string): Observable<T> {
+      return this.http.delete<T>('/api' + url);
+    }
 }

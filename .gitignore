@@ -11,6 +11,7 @@ coverage/
 .idea/
 .vscode/
 
-# Copilot requirements files
-ui/COPILOT_REQUIREMENTS.md
-api/COPILOT_REQUIREMENTS.md
+
+# Ignore all files in infra/soda
+api/infra/soda
+infra/soda/*

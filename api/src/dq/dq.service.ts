@@ -4,33 +4,64 @@ import { RunDynamicScanDto } from './dto/run-dynamic-scan.dto';
 import * as fs from 'fs/promises';
 import { exec } from 'child_process';
 import * as yaml from 'js-yaml';
+import * as path from 'path';
 
 @Injectable()
 export class DqService {
   async runStaticScan(dto: RunStaticScanDto): Promise<any> {
     const { dataFile, checksFile } = dto;
-  const command = `docker exec opendq-soda soda scan /data/${dataFile} /data/${checksFile}`;
+  const command = `docker exec opendq-soda soda scan -d postgres /data/${checksFile} -c /data/soda_postgres_config.yml`;
     return this.execSodaCommand(command);
   }
 
   async runDynamicScan(dto: RunDynamicScanDto): Promise<any> {
-    // Write temp files
-    const dataPath = `/data/tmp_data_${Date.now()}.csv`;
-    const checksPath = `/data/tmp_checks_${Date.now()}.yml`;
-    await fs.writeFile(`./infra/soda${dataPath.replace('/data','')}`, dto.data);
-    await fs.writeFile(`./infra/soda${checksPath.replace('/data','')}`, dto.checks);
-  const command = `docker exec opendq-soda soda scan ${dataPath} ${checksPath}`;
+    // Write temp checks YAML file to the same host path as integration test
+    const checksFileName = `tmp_checks_${Date.now()}.yml`;
+    const hostChecksDir = path.resolve(__dirname, '../../../infra/soda');
+    const hostChecksPath = path.join(hostChecksDir, checksFileName);
+    const containerChecksPath = `/data/${checksFileName}`;
+    await fs.mkdir(hostChecksDir, { recursive: true });
+    await fs.writeFile(hostChecksPath, dto.checks);
+  const command = `docker exec opendq-soda soda scan -d postgres ${containerChecksPath} -c /data/soda_postgres_config.yml`;
     const result = await this.execSodaCommand(command);
-    // Clean up temp files
-    await fs.unlink(`./infra/soda${dataPath.replace('/data','')}`);
-    await fs.unlink(`./infra/soda${checksPath.replace('/data','')}`);
-    return result;
+    // Debug: log the result to help diagnose missing status
+    console.log('Soda scan result:', JSON.stringify(result, null, 2));
+    // Parse status from raw output if needed
+    let status = 'unknown';
+    let score = null;
+    if (result && result.raw) {
+      // Look for PASSED/FAILED in the output
+      const failedMatch = result.raw.match(/(\d+\/\d+) check FAILED/i);
+      const passedMatch = result.raw.match(/(\d+\/\d+) check PASSED/i);
+      if (failedMatch) {
+        status = 'FAILED';
+      } else if (passedMatch) {
+        status = 'PASSED';
+      }
+      // Optionally, extract score or other info here
+    }
+    // Clean up temp file
+    await fs.unlink(hostChecksPath);
+    // Return a structure similar to Soda's normal output
+    return {
+      checks: [
+        {
+          outcome: status,
+          score: score,
+        },
+      ],
+      raw: result.raw,
+    };
   }
 
   private execSodaCommand(command: string): Promise<any> {
     return new Promise((resolve, reject) => {
       exec(command, (error, stdout, stderr) => {
         if (error) {
+          // Log both stdout and stderr for debugging
+          console.error('Soda scan error:', error.message);
+          console.error('STDERR:', stderr);
+          console.error('STDOUT:', stdout);
           reject(stderr || error.message);
         } else {
           try {

@@ -23,6 +23,13 @@ interface Rule {
 export class RulesManagementComponent implements OnInit {
   rules: Rule[] = [];
   rule: Rule = this.emptyRule();
+  ruleResults: any[] = [];
+  runRule(r: Rule) {
+    this.api.post('/dq/rules/run-rule', { ruleId: r.id }).subscribe((res: any) => {
+      // If backend returns a single result, wrap in array for table
+      this.ruleResults = Array.isArray(res) ? res : [res];
+    });
+  }
 
   constructor(private api: ApiService) {}
 

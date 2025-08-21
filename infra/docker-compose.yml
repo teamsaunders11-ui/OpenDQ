@@ -45,7 +45,7 @@ services:
     container_name: opendq-soda
     working_dir: /data
     volumes:
-      - ./soda:/data
+      - ./infra/soda:/data
     entrypoint: ["tail", "-f", "/dev/null"]
     networks:
       - default

@@ -53,8 +53,32 @@
         <td>
           <button (click)="editRule(r)">Edit</button>
           <button (click)="deleteRule(r.id!)">Delete</button>
+          <button (click)="runRule(r)">Run</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="ruleResults.length > 0">
+    <h3>Rule Execution Results</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Rule Name</th>
+          <th>Table</th>
+          <th>Status</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let res of ruleResults">
+          <td>{{ res.ruleName }}</td>
+          <td>{{ res.tableName }}</td>
+          <td>{{ res.status }}</td>
+          <td>{{ res.score }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+

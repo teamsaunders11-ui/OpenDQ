@@ -2,7 +2,6 @@ import { Client } from 'pg';
 import { exec } from 'child_process';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import * as os from 'os';
 
 describe('Soda/Postgres Integration', () => {
   const tableName = 'soda_test_table';

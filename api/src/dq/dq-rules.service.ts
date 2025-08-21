@@ -21,11 +21,16 @@ export class DqRulesService {
     return this.dqRuleRepository.find();
   }
 
+
   async update(id: number, updateDqRuleDto: UpdateDqRuleDto) {
     const rule = await this.dqRuleRepository.findOneBy({ id });
     if (!rule) throw new NotFoundException('Rule not found');
     Object.assign(rule, updateDqRuleDto);
     return this.dqRuleRepository.save(rule);
+  }
+
+  async findById(id: number) {
+    return this.dqRuleRepository.findOneBy({ id });
   }
 
   async remove(id: number) {

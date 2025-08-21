@@ -5,9 +5,30 @@ import { AddToCatalogDto } from './dto/add-to-catalog.dto';
 export class CatalogService {
   private readonly logger = new Logger(CatalogService.name);
 
-  async addToCatalog(dto: AddToCatalogDto) {
-    // Simulate sending metadata to Apache Atlas (log for now)
-    this.logger.log(`Simulating sending to Apache Atlas: ${JSON.stringify(dto)}`);
-    return { message: 'Metadata sent to Apache Atlas (simulated)', data: dto };
+
+  /**
+   * TODO: Integrate with Atlas API to register table metadata
+   */
+  async registerTable(connectionId: string, tables: string[]) {
+    // Simulate sending table metadata to Atlas
+    this.logger.log(`Simulating registerTable to Atlas: connectionId=${connectionId}, tables=${JSON.stringify(tables)}`);
+    return { status: 'simulated' };
+  }
+
+  /**
+   * TODO: Integrate with Atlas API to fetch real lineage
+   */
+  async getLineage(table: string) {
+    // Simulated lineage response
+    this.logger.log(`Simulating getLineage for table: ${table}`);
+    return {
+      table,
+      lineage: [
+        { source: 'upstream_table_1', target: table },
+        { source: 'upstream_table_2', target: table },
+        { source: table, target: 'downstream_table_1' },
+      ],
+      status: 'simulated',
+    };
   }
 }

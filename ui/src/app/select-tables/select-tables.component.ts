@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../api.service';
+import { CatalogService } from '../catalog.service';
 
 interface Connection {
   id: number;
@@ -30,7 +31,7 @@ export class SelectTablesComponent implements OnInit {
   catalogMessage = '';
   errorMessage = '';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private catalog: CatalogService) {}
 
   ngOnInit() {
     this.api.get('/connections').subscribe({
@@ -82,15 +83,12 @@ export class SelectTablesComponent implements OnInit {
     if (!this.selectedConnectionId || this.selectedTables.size === 0) return;
     this.catalogMessage = '';
     this.errorMessage = '';
-    this.api.post('/catalog', {
-      connectionId: this.selectedConnectionId,
-      tables: Array.from(this.selectedTables)
-    }).subscribe({
-      next: (res: { message: string }) => {
-        this.catalogMessage = res.message;
+    this.catalog.registerTable(this.selectedConnectionId, Array.from(this.selectedTables)).subscribe({
+      next: (res: { status: string }) => {
+        this.catalogMessage = res.status === 'simulated' ? 'Catalog registration simulated.' : 'Catalog registration complete.';
       },
       error: () => {
-        this.errorMessage = 'Failed to catalog selected tables.';
+        this.errorMessage = 'Failed to register selected tables.';
       }
     });
   }

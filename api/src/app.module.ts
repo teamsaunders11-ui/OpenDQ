@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { HealthController } from './health.controller';
+
 import { AppService } from './app.service';
 import { DqModule } from './dq/dq.module';
 import { ConnectionsModule } from './connections/connections.module';
@@ -24,8 +25,10 @@ import { ConnectionsModule } from './connections/connections.module';
         synchronize: true, // Set to false in production
       }),
     }),
-    DqModule,
-    ConnectionsModule,
+  DqModule,
+  ConnectionsModule,
+  // Catalog feature module
+  require('./catalog/catalog.module').CatalogModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

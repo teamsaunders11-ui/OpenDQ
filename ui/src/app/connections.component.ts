@@ -10,6 +10,7 @@ import { ApiService } from './api.service';
   template: `
     <h2>Connections</h2>
     <form [formGroup]="form" (ngSubmit)="save()">
+      <label>Name: <input formControlName="name" autocomplete="name" /></label><br />
       <label>Host: <input formControlName="host" autocomplete="host" /></label><br />
       <label>Port: <input formControlName="port" type="number" autocomplete="off" /></label><br />
       <label>Database: <input formControlName="database" autocomplete="database" /></label><br />
@@ -42,6 +43,7 @@ export class ConnectionsComponent {
 
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.form = this.fb.group({
+      name: '',
       host: '',
       port: 5432,
       database: '',

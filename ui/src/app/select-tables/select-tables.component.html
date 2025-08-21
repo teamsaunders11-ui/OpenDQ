@@ -1,0 +1,20 @@
+<div class="select-tables-container">
+  <h2>Select Tables</h2>
+  <label for="connection">Select Connection:</label>
+  <select id="connection" [(ngModel)]="selectedConnectionId" (change)="onConnectionChange()">
+    <option value="" disabled selected>Select a connection</option>
+    <option *ngFor="let conn of connections" [value]="conn.id">{{ conn.name || 'Connection ' + conn.id }}</option>
+  </select>
+
+  <div *ngIf="loadingTables">Loading tables...</div>
+  <div *ngIf="tables.length">
+    <h3>Tables</h3>
+    <div *ngFor="let table of tables">
+      <input type="checkbox" [id]="table" [checked]="selectedTables.has(table)" (change)="toggleTable(table)">
+      <label [for]="table">{{ table }}</label>
+    </div>
+  </div>
+
+  <button (click)="catalogSelected()" [disabled]="!selectedConnectionId || !selectedTables.size">Catalog Selected</button>
+  <div *ngIf="catalogMessage">{{ catalogMessage }}</div>
+</div>

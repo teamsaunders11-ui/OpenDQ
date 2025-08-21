@@ -1,16 +1,23 @@
 
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateConnectionDto } from './dto/create-connection.dto';
+import { ConnectionEntity } from './connection.entity';
 
 @Injectable()
 export class ConnectionsService {
-  private connections: CreateConnectionDto[] = [];
+  constructor(
+    @InjectRepository(ConnectionEntity)
+    private readonly connectionRepo: Repository<ConnectionEntity>
+  ) {}
 
-  create(connection: CreateConnectionDto) {
-    this.connections.push(connection);
+  async create(connection: CreateConnectionDto): Promise<ConnectionEntity> {
+    const entity = this.connectionRepo.create(connection);
+    return this.connectionRepo.save(entity);
   }
 
-  findAll(): CreateConnectionDto[] {
-    return this.connections;
+  findAll(): Promise<ConnectionEntity[]> {
+    return this.connectionRepo.find();
   }
 }

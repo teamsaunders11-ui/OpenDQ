@@ -21,4 +21,12 @@ export class ApiService {
   validateConnection(conn: any): Observable<any> {
     return this.http.post('/api/connections/validate', conn);
   }
+
+  get(url: string, options?: any): Observable<any> {
+    return this.http.get('/api' + url, options);
+  }
+
+  post(url: string, body: any, options?: any): Observable<any> {
+    return this.http.post('/api' + url, body, options);
+  }
 }

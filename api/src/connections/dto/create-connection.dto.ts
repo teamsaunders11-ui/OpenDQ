@@ -3,6 +3,10 @@ import { IsString, IsInt, Min, IsNotEmpty } from 'class-validator';
 export class CreateConnectionDto {
   @IsString()
   @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
   host: string;
 
   @IsInt()

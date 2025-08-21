@@ -1,0 +1,12 @@
+.connections-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.connections-table th, .connections-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+}
+.connections-table th {
+  background: #f9f9f9;
+}

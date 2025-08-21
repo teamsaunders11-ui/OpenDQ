@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard.component';
-import { ConnectionsComponent } from './connections.component';
+import { ConnectionsComponent } from './connections/connections.component';
 import { CatalogComponent } from './catalog.component';
 
 import { RulesComponent } from './rules.component';

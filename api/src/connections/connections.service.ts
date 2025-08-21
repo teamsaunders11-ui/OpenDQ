@@ -20,4 +20,13 @@ export class ConnectionsService {
   findAll(): Promise<ConnectionEntity[]> {
     return this.connectionRepo.find();
   }
+
+  async update(id: number, connection: CreateConnectionDto): Promise<ConnectionEntity | null> {
+    await this.connectionRepo.update(id, connection);
+    return this.connectionRepo.findOneBy({ id });
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.connectionRepo.delete(id);
+  }
 }

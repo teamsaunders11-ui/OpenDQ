@@ -39,6 +39,16 @@ services:
       - ATLAS_OPTS=-Xmx1024m
     volumes:
       - atlas_data:/opt/atlas/data
+      
+  soda-core:
+    image: sodadata/soda-core:latest
+    container_name: opendq-soda
+    working_dir: /data
+    volumes:
+      - ./soda:/data
+    entrypoint: ["tail", "-f", "/dev/null"]
+    networks:
+      - default
 
 volumes:
   postgres_data:

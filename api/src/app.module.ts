@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { HealthController } from './health.controller';
 import { AppService } from './app.service';
+import { DqModule } from './dq/dq.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AppService } from './app.service';
         synchronize: true, // Set to false in production
       }),
     }),
+  DqModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

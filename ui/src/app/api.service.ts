@@ -9,4 +9,16 @@ export class ApiService {
   getGovernanceEntities(): Observable<any> {
     return this.http.get('/governance/entities');
   }
+
+  getConnections(): Observable<any[]> {
+    return this.http.get<any[]>('/api/connections');
+  }
+
+  saveConnection(conn: any): Observable<any> {
+    return this.http.post('/api/connections', conn);
+  }
+
+  validateConnection(conn: any): Observable<any> {
+    return this.http.post('/api/connections/validate', conn);
+  }
 }

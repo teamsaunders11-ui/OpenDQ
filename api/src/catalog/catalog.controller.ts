@@ -1,6 +1,5 @@
 import { Body, Controller, Post, Get, Param } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
-import { AddToCatalogDto } from './dto/add-to-catalog.dto';
 
 @Controller('catalog')
 export class CatalogController {
@@ -12,8 +11,8 @@ export class CatalogController {
    */
 
   @Post('register')
-  async registerTable(@Body() body: { connectionId: string, tables: string[] }) {
-    return this.catalogService.registerTable(body.connectionId, body.tables);
+  async registerTable(@Body() body: { connectionId: string; tables: string[] }) {
+    return this.catalogService.registerTable(body);
   }
 
   /**

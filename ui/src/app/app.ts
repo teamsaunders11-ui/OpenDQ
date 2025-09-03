@@ -1,18 +1,14 @@
-import { Component, signal, importProvidersFrom } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive
-  ],
-  templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  imports: [RouterOutlet],
+  template: `
+    <router-outlet />
+  `,
+  styles: [],
 })
-export class AppComponent {
+export class App {
   protected readonly title = signal('ui');
 }

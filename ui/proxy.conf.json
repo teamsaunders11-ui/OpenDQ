@@ -1,8 +1,9 @@
 {
   "/api": {
-    "target": "http://localhost:3000",
+  "target": "http://opendq-api:3000",
+  "pathRewrite": { "^/api": "" },
     "secure": false,
     "changeOrigin": true,
-    "pathRewrite": { "^/api": "/api" }
+    "logLevel": "debug"
   }
 }

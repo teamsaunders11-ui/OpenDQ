@@ -1,1 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
+@use '../node_modules/primeicons/primeicons.css';
+@use '../node_modules/primeflex/primeflex.css';
+
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: normal;
+  font-weight: 400;
+}
+
+body {
+  background-color: var(--p-surface-50);
+  min-height: 100vh;
+}
+
+.p-dark body {
+  background-color: var(--p-surface-950);
+}
+
+.onboard-db-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.success {
+  color: #22c55e;
+  margin-top: 1rem;
+}
+
+.error {
+  color: #ef4444;
+  margin-top: 1rem;
+}
+
+.spinner {
+  display: block;
+  margin: 1rem auto;
+}
+
+@media (max-width: 991px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .layout-grid-row {
+    flex-direction: column;
+  }
+  .col-item-2 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fill-primary {
+  fill: var(--p-primary-500);
+}
+
+.p-dark .fill-primary {
+  fill: var(--p-primary-400);
+}
+
+.fill-surface {
+  fill: var(--p-surface-900);
+}
+
+.p-dark .fill-surface {
+  fill: var(--p-surface-0);
+}
+
+.hidden {
+  display: none;
+}
+
+.relative {
+  position: relative;
+}

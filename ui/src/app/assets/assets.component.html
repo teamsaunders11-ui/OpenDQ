@@ -1,0 +1,108 @@
+<section class="p-4">
+  <h1 class="mb-4">{{ title }}</h1>
+  <div class="flex flex-column md:flex-row align-items-center gap-3 mb-4 px-3" style="min-width: 0">
+    <span class="flex-1">
+      <input
+        pInputText
+        type="text"
+        placeholder="Search by name..."
+        [ngModel]="filterValue()"
+        (ngModelChange)="filterValue.set($event)"
+        class="w-full md:w-20rem"
+      />
+    </span>
+    <span class="flex-none" style="min-width: 12rem">
+      <p-select
+        [options]="typeOptions"
+        [ngModel]="typeFilterValue()"
+        (ngModelChange)="typeFilterValue.set($event)"
+        class="w-full md:w-14rem"
+        dropdownIcon="pi pi-chevron-down"
+        appendTo="body"
+        placeholder="Select Type"
+        optionLabel="label"
+        optionValue="value"
+      ></p-select>
+    </span>
+    <span class="flex-none flex gap-2">
+      <button
+        pButton
+        [label]="'Grid View'"
+        [outlined]="viewMode !== 'grid'"
+        [severity]="viewMode === 'grid' ? 'primary' : 'secondary'"
+        (click)="setViewMode('grid')"
+      ></button>
+      <button
+        pButton
+        [label]="'Card View'"
+        [outlined]="viewMode !== 'card'"
+        [severity]="viewMode === 'card' ? 'primary' : 'secondary'"
+        (click)="setViewMode('card')"
+      ></button>
+    </span>
+  </div>
+
+  @if (viewMode === 'grid') {
+  <p-table [value]="filteredAssets()" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Score</th>
+        <th>Parent ID</th>
+        <th>Metadata</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-asset>
+      <tr>
+        <td>{{ asset.name }}</td>
+        <td>{{ asset.type }}</td>
+        <td>{{ asset.score ?? '-' }}</td>
+        <td>{{ asset['parentId'] ?? '-' }}</td>
+        <td>
+          <ng-container *ngFor="let key of Object.keys(asset)">
+            @if (!['name', 'type', 'score', 'parentId'].includes(key)) {
+            <ng-container>
+              <span
+                ><strong>{{ key }}:</strong> {{ asset[key] }}&nbsp;</span
+              >
+            </ng-container>
+            }
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No assets found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  } @else {
+  <div class="grid grid-nogutter gap-3">
+    @for (asset of filteredAssets().slice(cardFirst, cardFirst + cardRows); track asset.name) {
+    <div class="col-12 md:col-4 lg:col-3">
+      <p-card [header]="asset.name" [subheader]="asset.type">
+        <div class="flex flex-column gap-2">
+          <div><b>Score:</b> {{ asset.score ?? '-' }}</div>
+          <div><b>Parent ID:</b> {{ asset['parentId'] ?? '-' }}</div>
+          <div *ngFor="let key of Object.keys(asset)">
+            <ng-container *ngIf="!['name', 'type', 'score', 'parentId'].includes(key)">
+              <b>{{ key }}:</b> {{ asset[key] }}<br />
+            </ng-container>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    }
+    <div *ngIf="filteredAssets().length === 0" class="col-12">No assets found.</div>
+  </div>
+  <p-paginator
+    [rows]="cardRows"
+    [totalRecords]="filteredAssets().length"
+    [first]="cardFirst"
+    (onPageChange)="onCardPageChange($event)"
+    class="mt-3"
+  ></p-paginator>
+  }
+</section>

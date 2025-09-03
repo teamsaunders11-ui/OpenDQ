@@ -10,8 +10,11 @@ yarn.lock
 coverage/
 .idea/
 .vscode/
-
+.github
+.github/
 
 # Ignore all files in infra/soda
 api/infra/soda
 infra/soda/*
+
+
